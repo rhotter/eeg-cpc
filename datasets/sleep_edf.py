@@ -21,7 +21,7 @@ event_id = {'Sleep stage W': 1,
       'Sleep stage 3/4': 4,
       'Sleep stage R': 5} # unifies stages 3 and 4
 
-def load_labelled_data(subjects, path='/home/raphael_hotter/datasets', recording=[1, 2], filter=False):
+def load_labelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/datasets', filter=False):
   files = _fetch_data(subjects, path, recording)
   epochs = []
   for x in files:
@@ -52,7 +52,7 @@ def load_labelled_data(subjects, path='/home/raphael_hotter/datasets', recording
   epochs.pick_types(eeg=True, verbose='ERROR') # only keep EEG channels
   return epochs
 
-def load_unlabelled_data(subjects, path='/home/raphael_hotter/datasets', recording=[1, 2]):
+def load_unlabelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/datasets'):
   files = fetch_data(subjects, path, recording)
   data = []
   for x in files:
