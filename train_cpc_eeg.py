@@ -47,7 +47,7 @@ class SSL_Window_Sampler():
         negative_samples.append(recording[:, idx:idx+window_length])
     return negative_samples
   
-	def get_minibatch(train_data):
+	def get_minibatch(self, train_data):
 		"""
 		Return list has [{
 			context windows: [[],[],...],
