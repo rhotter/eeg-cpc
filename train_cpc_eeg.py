@@ -6,6 +6,9 @@ from torch.utils import data
 
 from .train_helpers import normalize_one
 from .models import CPC_EEG
+import os.path as op
+
+root = op.dirname(__file__)
 
 def train_cpc_eeg(train_data, test_data, model, n_context_windows, n_predict_windows,
 n_negatives, overlap, sampling_freq, window_length, predict_delay, batch_size=128, lr=1e-3):
@@ -96,7 +99,7 @@ def _train_epochs(model, train_data, test_data, sampler, train_args):
 		
 		# save model every 10 epochs
 		if epoch % 10 == 0:
-			torch.save(model.state_dict(), 'saved_models/cpc_eeg_model_epoch{}.h'.format(epoch))
+			torch.save(model.state_dict(), op.join(root, 'saved_models', 'cpc_eeg_model_epoch{}.h'.format(epoch)))
 	return train_losses, test_losses
 
 def _train(model, train_data, optimizer, epoch, sampler):

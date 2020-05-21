@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-import numpy as n_spatial_filters
+import numpy as np
 
 class EEG_FeatureExtractor(nn.Module):
     # based on "A deep learning architecture for temporal sleep stage

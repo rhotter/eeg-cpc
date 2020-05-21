@@ -53,7 +53,7 @@ def load_labelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/da
   return epochs
 
 def load_unlabelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/datasets'):
-  files = fetch_data(subjects, path, recording)
+  files = _fetch_data(subjects, path, recording)
   data = []
   for x in files:
     print("Loading", x[0])

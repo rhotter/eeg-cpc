@@ -5,6 +5,9 @@ import numpy as np
 from .train_helpers import normalize, get_loss_weights
 
 from .models import SupervisedBaseline
+import os.path as op
+
+root = op.dirname(__file__)
 
 def train_supervised_baseline(epochs_train, epochs_test, n_epochs=20, lr=1e-3, batch_size=256):
   X_train = normalize(epochs_train.get_data())
@@ -46,7 +49,7 @@ def _train_epochs(model, train_loader, test_loader, train_args):
     
 		# save model every 10 epochs
     if epoch % 10 == 0:
-      torch.save(model.state_dict(), 'saved_models/supervised_baseline_model_epoch{}.h'.format(epoch))
+			torch.save(model.state_dict(), op.join(root, 'saved_models', 'supervised_baseline_model_epoch{}.h'.format(epoch)))
   return train_losses, test_losses
 
 def _train(model, train_loader, optimizer, epoch):
