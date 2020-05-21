@@ -5,6 +5,7 @@ from sklearn.metrics import classification_report
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import FunctionTransformer
 from sklearn.metrics import balanced_accuracy_score
+from mne.time_frequency import psd_welch
 
 import numpy as np
 
