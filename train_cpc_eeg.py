@@ -4,7 +4,7 @@ import torch
 from torch import optim
 from torch.utils import data
 
-from helpers import normalize_one
+from train_helpers import normalize_one
 from models import CPC_EEG
 
 def train_ssl(train_data, test_data, model, ssl_args):

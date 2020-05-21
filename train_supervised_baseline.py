@@ -2,7 +2,7 @@ import torch
 from torch import optim
 from torch.utils import data
 import numpy as np
-from helpers import normalize, get_loss_weights
+from train_helpers import normalize, get_loss_weights
 
 from models import SupervisedBaseline
 
