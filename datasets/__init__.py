@@ -1,1 +1,1 @@
-import ./sleep_edf
+from . import sleep_edf

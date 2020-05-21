@@ -4,52 +4,53 @@ import numpy as np
 import mne
 
 MAPPING = {'EOG horizontal': 'eog',
-           'Resp oro-nasal': 'misc',
-           'EMG submental': 'misc',
-           'Temp rectal': 'misc',
-           'Event marker': 'misc'}
+			 'Resp oro-nasal': 'misc',
+			 'EMG submental': 'misc',
+			 'Temp rectal': 'misc',
+			 'Event marker': 'misc'}
 
 annotation_desc_2_event_id = {'Sleep stage W': 1,
-                              'Sleep stage 1': 2,
-                              'Sleep stage 2': 3,
-                              'Sleep stage 3': 4,
-                              'Sleep stage 4': 4,
-                              'Sleep stage R': 5}
+								'Sleep stage 1': 2,
+								'Sleep stage 2': 3,
+								'Sleep stage 3': 4,
+								'Sleep stage 4': 4,
+								'Sleep stage R': 5}
 event_id = {'Sleep stage W': 1,
-            'Sleep stage 1': 2,
-            'Sleep stage 2': 3,
-            'Sleep stage 3/4': 4,
-            'Sleep stage R': 5} # unifies stages 3 and 4
+			'Sleep stage 1': 2,
+			'Sleep stage 2': 3,
+			'Sleep stage 3/4': 4,
+			'Sleep stage R': 5} # unifies stages 3 and 4
 
 def load_labelled_data(subjects, path='/home/raphael_hotter/datasets', recording=[1, 2], filter=False):
-    files = _fetch_data(subjects, path, recording)
-    epochs = []
-    for x in files:
-        print("Loading", x[0])
-        # load the data
-        edf_file = x[0]
-        annot_file = x[1]
-        raw = mne.io.read_raw_edf(edf_file, verbose='ERROR')
-        annot_train = mne.read_annotations(annot_file, verbose='ERROR')
+	files = _fetch_data(subjects, path, recording)
+	epochs = []
+	for x in files:
+		print("Loading", x[0])
+		# load the data
+		edf_file = x[0]
+		annot_file = x[1]
+		raw = mne.io.read_raw_edf(edf_file, verbose='ERROR')
+		annot_train = mne.read_annotations(annot_file, verbose='ERROR')
 
-        raw.set_annotations(annot_train, emit_warning=False)
-        raw.set_channel_types(MAPPING)
-        
-        if filter:
-            raw.load_data()
-            raw.filter(None, 30., fir_design='firwin') # low pass filter
+		raw.set_annotations(annot_train, emit_warning=False)
+		raw.set_channel_types(MAPPING)
+		
+		if filter:
+			raw.load_data()
+			raw.filter(None, 30., fir_design='firwin') # low pass filter
 
-        # extract epochs
-        events_train, _ = mne.events_from_annotations(
-            raw, event_id=annotation_desc_2_event_id, chunk_duration=30., verbose='ERROR')
+		# extract epochs
+		events_train, _ = mne.events_from_annotations(
+			raw, event_id=annotation_desc_2_event_id, chunk_duration=30., verbose='ERROR')
 
-        tmax = 30. - 1. / raw.info['sfreq']  # tmax in included
-        recording_epochs = mne.Epochs(raw=raw, events=events_train,
-                              event_id=event_id, tmin=0., tmax=tmax, baseline=None, verbose='ERROR')
-        epochs.append(recording_epochs)
-    epochs = mne.concatenate_epochs(epochs)
-		epochs.pick_types(eeg=True, verbose='ERROR') # only keep EEG channels
-    return epochs
+		tmax = 30. - 1. / raw.info['sfreq']  # tmax in included
+		recording_epochs = mne.Epochs(raw=raw, events=events_train,
+								event_id=event_id, tmin=0., tmax=tmax, baseline=None, verbose='ERROR')
+		epochs.append(recording_epochs)
+	
+	epochs = mne.concatenate_epochs(epochs)
+	epochs.pick_types(eeg=True, verbose='ERROR') # only keep EEG channels
+	return epochs
 
 def load_unlabelled_data(subjects, path='/home/raphael_hotter/datasets', recording=[1, 2]):
 	files = fetch_data(subjects, path, recording)
