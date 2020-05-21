@@ -89,11 +89,11 @@ def _train_epochs(model, train_data, test_data, sampler, train_args):
 	optimizer = optim.Adam(model.parameters(), lr=lr)
 
 	train_losses = []
-	test_losses = [_eval_loss(model, test_data)]
+	test_losses = [_eval_loss(model, test_data, sampler)]
 	for epoch in range(1, epochs + 1):
 		model.train()
-		train_losses.extend(_train(model, train_data, optimizer, epoch))
-		test_loss = _eval_loss(model, test_data)
+		train_losses.extend(_train(model, train_data, optimizer, epoch, sampler))
+		test_loss = _eval_loss(model, test_data, sampler)
 		test_losses.append(test_loss)
 		print(f'Epoch {epoch}, Test loss {test_loss:.4f}')
 		
