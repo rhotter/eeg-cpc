@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from feature_extractor import EEG_FeatureExtractor
+from .feature_extractor import EEG_FeatureExtractor
 
 class SupervisedBaseline(nn.Module):
 	def __init__(self, C, T, n_classes, loss_weights, k=50, m=13, dropout_prob=0.5, n_spatial_filters=8):

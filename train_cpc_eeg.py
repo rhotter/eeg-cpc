@@ -22,7 +22,7 @@ def train_ssl(train_data, test_data, model, ssl_args):
 	train_losses, test_losses = _train_epochs(model, train_data, test_data,
 																			dict(epochs=n_epochs, lr=1e-3, batch_size=batch_size))
 
-return train_losses, test_losses, model
+	return train_losses, test_losses, model
 
 class SSL_Window_Sampler():
 	def __init__(self, n_context_windows=8, n_predict_windows=4, n_negatives=4, overlap=0.5, sampling_freq=100, window_length=30, predict_delay=60, batch_size=128):
@@ -36,7 +36,7 @@ class SSL_Window_Sampler():
 		self.sampling_freq = sampling_freq
 
 	def sample_negative(self, recording, start_sample, n_samples):
-  	n_available_positions = recording.shape[1] - n_samples - 2*self.window_length
+		n_available_positions = recording.shape[1] - n_samples - 2*self.window_length
     random_indices = np.random.choice(n_available_positions, self.n_negatives)
     negative_samples = []
     for i in random_indices:

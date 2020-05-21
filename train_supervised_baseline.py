@@ -2,9 +2,9 @@ import torch
 from torch import optim
 from torch.utils import data
 import numpy as np
-from train_helpers import normalize, get_loss_weights
+from .train_helpers import normalize, get_loss_weights
 
-from models import SupervisedBaseline
+from .models import SupervisedBaseline
 
 def train_supervised_baseline(epochs_train, epochs_test, n_epochs=20):
   X_train = normalize(epochs_train.get_data())
@@ -45,8 +45,8 @@ def _train_epochs(model, train_loader, test_loader, train_args):
     print(f'Epoch {epoch}, Test loss {test_loss:.4f}')
     
 		# save model every 10 epochs
-		if epoch % 10 == 0:
-			torch.save(model.state_dict(), 'saved_models/supervised_baseline_model_epoch{}.h'.format(epoch))
+    if epoch % 10 == 0:
+      torch.save(model.state_dict(), 'saved_models/supervised_baseline_model_epoch{}.h'.format(epoch))
   return train_losses, test_losses
 
 def _train(model, train_loader, optimizer, epoch):

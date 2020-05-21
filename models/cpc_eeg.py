@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 from torch import nn
-from feature_extractor import EEG_FeatureExtractor
+from .feature_extractor import EEG_FeatureExtractor
 
 class CPC_EEG(nn.Module):
   def __init__(self, C, T, n_context, n_predict, n_negatives, embedding_dim=100, k=50, m=13, dropout_prob=0.5, n_spatial_filters=8):
