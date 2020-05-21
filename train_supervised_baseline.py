@@ -6,7 +6,7 @@ from .train_helpers import normalize, get_loss_weights
 
 from .models import SupervisedBaseline
 
-def train_supervised_baseline(epochs_train, epochs_test, n_epochs=20):
+def train_supervised_baseline(epochs_train, epochs_test, n_epochs=20, lr=1e-3, batch_size=256):
   X_train = normalize(epochs_train.get_data())
   
   y_train = epochs_train.events[:, 2] - 1 # start at 0
@@ -21,13 +21,13 @@ def train_supervised_baseline(epochs_train, epochs_test, n_epochs=20):
   model = SupervisedBaseline(C, T, n_classes, loss_weights).cuda()
 
   train_dataset = data.TensorDataset(torch.tensor(X_train).unsqueeze(1), torch.tensor(y_train))
-  train_loader = data.DataLoader(train_dataset, batch_size=256, shuffle=True)
+  train_loader = data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
   test_dataset = data.TensorDataset(torch.tensor(X_test).unsqueeze(1), torch.tensor(y_test))
-  test_loader = data.DataLoader(test_dataset, batch_size=256, shuffle=True)
+  test_loader = data.DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
   train_losses, test_losses = _train_epochs(model, train_loader, test_loader, 
-                                         dict(epochs=n_epochs, lr=1e-3))
+                                         dict(epochs=n_epochs, lr=lr))
 
   return train_losses, test_losses, model
 
