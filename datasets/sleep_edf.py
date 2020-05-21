@@ -30,7 +30,7 @@ def load_labelled_data(subjects, path='/home/raphael_hotter/datasets', recording
     edf_file = x[0]
     annot_file = x[1]
     raw = mne.io.read_raw_edf(edf_file, verbose='ERROR')
-    annot_train = mne.read_annotations(annot_file, verbose='ERROR')
+    annot_train = mne.read_annotations(annot_file)
 
     raw.set_annotations(annot_train, emit_warning=False)
     raw.set_channel_types(MAPPING)
