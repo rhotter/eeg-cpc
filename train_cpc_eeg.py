@@ -6,6 +6,7 @@ from torch.utils import data
 
 from .train_helpers import normalize_one
 from .models import CPC_EEG
+import os
 import os.path as op
 
 root = op.dirname(__file__)
@@ -87,6 +88,10 @@ class SSL_Window_Sampler():
 def _train_epochs(model, train_data, test_data, sampler, train_args):
 	epochs, lr, batch_size = train_args['epochs'], train_args['lr'], train_args['batch_size']
 	optimizer = optim.Adam(model.parameters(), lr=lr)
+
+	saved_models_dir = op.join(root, 'saved_models')
+	if not os.path.exists(saved_models_dir):
+		os.makedirs(saved_models_dir)
 
 	train_losses = []
 	test_losses = [_eval_loss(model, test_data, sampler)]

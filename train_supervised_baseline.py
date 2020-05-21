@@ -38,6 +38,10 @@ def _train_epochs(model, train_loader, test_loader, train_args):
   epochs, lr = train_args['epochs'], train_args['lr']
   optimizer = optim.Adam(model.parameters(), lr=lr)
 
+  saved_models_dir = op.join(root, 'saved_models')
+	if not os.path.exists(saved_models_dir):
+  	os.makedirs(saved_models_dir)
+
   train_losses = []
   test_losses = [_eval_loss(model, test_loader)]
   for epoch in range(1, epochs+1):

@@ -24,8 +24,8 @@ event_id = {'Sleep stage W': 1,
 def load_labelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/datasets', filter=False):
   files = _fetch_data(subjects, path, recording)
   epochs = []
+  print("Loading data...")
   for x in files:
-    print("Loading", x[0])
     # load the data
     edf_file = x[0]
     annot_file = x[1]
@@ -55,8 +55,8 @@ def load_labelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/da
 def load_unlabelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/datasets'):
   files = _fetch_data(subjects, path, recording)
   data = []
+  print("Loading data...")
   for x in files:
-    print("Loading", x[0])
     # load the data
     edf_file = x[0]
     raw = mne.io.read_raw_edf(edf_file, verbose='ERROR')
