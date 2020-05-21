@@ -53,7 +53,7 @@ def _train_epochs(model, train_loader, test_loader, train_args):
     
 		# save model every 10 epochs
     if epoch % 10 == 0:
-      torch.save(model.state_dict(), op.join(root, 'saved_models', 'supervised_baseline_model_epoch{}.h'.format(epoch)))
+      torch.save(model.state_dict(), op.join(root, 'saved_models', 'supervised_baseline_model_epoch{}.pt'.format(epoch)))
   return train_losses, test_losses
 
 def _train(model, train_loader, optimizer, epoch):

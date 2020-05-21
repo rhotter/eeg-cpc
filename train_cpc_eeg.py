@@ -104,7 +104,7 @@ def _train_epochs(model, train_data, test_data, sampler, train_args):
 		
 		# save model every 10 epochs
 		if epoch % 10 == 0:
-			torch.save(model.state_dict(), op.join(root, 'saved_models', 'cpc_eeg_model_epoch{}.h'.format(epoch)))
+			torch.save(model.state_dict(), op.join(root, 'saved_models', 'cpc_eeg_model_epoch{}.pt'.format(epoch)))
 	return train_losses, test_losses
 
 def _train(model, train_data, optimizer, epoch, sampler):
