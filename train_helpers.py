@@ -24,7 +24,7 @@ def load_losses(saved_models_dir):
 		test_losses = np.load(f)
 	return train_losses, test_losses
 
-def save_losses(saved_models_dir):
+def save_losses(train_losses, test_losses, saved_models_dir):
 	with open(op.join(saved_models_dir, 'train_losses.npy'), 'wb') as f:
 		np.save(f, train_losses)
 	with open(op.join(saved_models_dir, 'test_losses.npy'), 'wb') as f:

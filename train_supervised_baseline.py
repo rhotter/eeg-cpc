@@ -45,7 +45,7 @@ def train_supervised_baseline(epochs_train, epochs_test, n_epochs=20, lr=1e-3, b
 	train_losses.extend(new_train_losses)
 	test_losses.extend(new_test_losses)
 
-	save_losses(saved_models_dir)
+	save_losses(train_losses, test_losses, saved_models_dir)
 
 	return train_losses, test_losses, model
 
