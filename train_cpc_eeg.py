@@ -56,15 +56,16 @@ class SSL_Window_Sampler():
 		self.sampling_freq = sampling_freq
 
 	def sample_negatives(self, recording, start_sample, sample_length):
-		n_available_positions = recording.shape[1] - sample_length - 2*self.window_length
+		samples_in_window = self.window_length*self.sampling_freq
+		n_available_positions = recording.shape[1] - sample_length - 2*samples_in_window
 		random_indices = np.random.choice(n_available_positions, self.n_negatives)
 		negative_samples = []
 		for i in random_indices:
-			if i < start_sample - self.window_length:
-				negative_samples.append(recording[:, i:i+self.window_length])
+			if i < start_sample - samples_in_window:
+				negative_samples.append(recording[:, i:i+samples_in_window])
 			else:
-				idx = i + self.window_length + sample_length
-				negative_samples.append(recording[:, idx:idx+self.window_length])
+				idx = i + samples_in_window + sample_length
+				negative_samples.append(recording[:, idx:idx+samples_in_window])
 		return negative_samples
 	
 	def get_minibatch(self, train_data):
