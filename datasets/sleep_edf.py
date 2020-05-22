@@ -30,7 +30,7 @@ def load_labelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/da
     # load the data
     edf_file = x[0]
     annot_file = x[1]
-    raw = mne.io.read_raw_edf(edf_file, verbose='ERROR')
+    raw = mne.io.read_raw_edf(edf_file, verbose='WARNING')
     annot_train = mne.read_annotations(annot_file)
 
     raw.set_annotations(annot_train, emit_warning=False)
@@ -42,16 +42,16 @@ def load_labelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/da
 
     # extract epochs
     events_train, _ = mne.events_from_annotations(
-      raw, event_id=annotation_desc_2_event_id, chunk_duration=30., verbose='ERROR')
+      raw, event_id=annotation_desc_2_event_id, chunk_duration=30., verbose='WARNING')
 
     tmax = 30. - 1. / raw.info['sfreq']  # tmax in included
     recording_epochs = mne.Epochs(raw=raw, events=events_train,
-                event_id=event_id, tmin=0., tmax=tmax, baseline=None, on_missing='warning', verbose='ERROR')
+                event_id=event_id, tmin=0., tmax=tmax, baseline=None, on_missing='warning', verbose='WARNING')
     epochs.append(recording_epochs)
   print("concatenating")
   epochs = mne.concatenate_epochs(epochs)
   print("picking types")
-  epochs.pick_types(eeg=True, verbose='ERROR') # only keep EEG channels
+  epochs.pick_types(eeg=True, verbose='WARNING') # only keep EEG channels
   return epochs
 
 def load_unlabelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/datasets'):
@@ -61,14 +61,14 @@ def load_unlabelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/
   for x in tqdm(files):
     # load the data
     edf_file = x[0]
-    raw = mne.io.read_raw_edf(edf_file, verbose='ERROR')
+    raw = mne.io.read_raw_edf(edf_file, verbose='WARNING')
 
     raw.set_channel_types(MAPPING)
     
     # filter
     raw.load_data()
     raw.filter(None, 30., fir_design='firwin') # low pass filter
-    raw.pick_types(eeg=True, verbose='ERROR') # only keep EEG channels
+    raw.pick_types(eeg=True, verbose='WARNING') # only keep EEG channels
 
     data.append(raw.get_data())
   return data
