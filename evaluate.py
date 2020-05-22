@@ -29,5 +29,5 @@ def scores(model, epochs_test):
 	
 	y_true, y_pred = get_test_results(model, test_loader)
 	print(f'Performance of the network on the {len(test_loader.dataset)} test images:')
-	print(f'\tAccuracy: {100*accuracy_score(y_true, y_pred)}%')
-	print(f'\tBalanced accuracy: {100*balanced_accuracy_score(y_true, y_pred)}%')
+	print(f'\tAccuracy: {100*accuracy_score(y_true, y_pred):.2f}%')
+	print(f'\tBalanced accuracy: {100*balanced_accuracy_score(y_true, y_pred):.2f}%')
