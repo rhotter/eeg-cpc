@@ -28,6 +28,8 @@ def scores(model, epochs_test):
 	test_loader = data.DataLoader(test_dataset, batch_size=128, shuffle=False)
 	
 	y_pred, y_true = get_test_results(model, test_loader)
+	import IPython
+	IPython.embed()
 	print(f'Performance of the network on the {len(test_loader.dataset)} test images:')
 	print(f'\tAccuracy: {100*accuracy_score(y_pred, y_true)}%')
 	print(f'\tBalanced accuracy: {100*balanced_accuracy_score(y_pred, y_true)}%')
