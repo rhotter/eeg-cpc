@@ -10,7 +10,7 @@ import os
 
 root = op.dirname(__file__)
 
-def train_supervised_baseline(epochs_train, epochs_test, n_epochs=20, lr=1e-3, batch_size=256):
+def train_supervised_baseline(epochs_train, epochs_test, n_epochs=20, lr=1e-3, batch_size=256, load_last_saved_model=False):
 	X_train = normalize(epochs_train.get_data())
 	
 	y_train = epochs_train.events[:, 2] - 1 # start at 0
@@ -23,6 +23,8 @@ def train_supervised_baseline(epochs_train, epochs_test, n_epochs=20, lr=1e-3, b
 	T = X_train.shape[2] # window length
 	loss_weights = get_loss_weights(epochs_train)
 	model = SupervisedBaseline(C, T, n_classes, loss_weights).cuda()
+	if load_last_saved_model:
+		model.load_state_dict(torch.load(op.join(root, 'saved_models', 'supervised_baseline_model.pt')))
 
 	train_dataset = data.TensorDataset(torch.tensor(X_train).unsqueeze(1), torch.tensor(y_train))
 	train_loader = data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
@@ -54,6 +56,7 @@ def _train_epochs(model, train_loader, test_loader, train_args):
 		# save model every 10 epochs
 		if epoch % 10 == 0:
 			torch.save(model.state_dict(), op.join(root, 'saved_models', 'supervised_baseline_model_epoch{}.pt'.format(epoch)))
+	torch.save(model.state_dict(), op.join(root, 'saved_models', 'supervised_baseline_model.pt'))
 	return train_losses, test_losses
 
 def _train(model, train_loader, optimizer, epoch):

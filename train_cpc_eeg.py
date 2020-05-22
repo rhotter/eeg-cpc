@@ -12,13 +12,17 @@ import os.path as op
 root = op.dirname(__file__)
 
 def train_cpc_eeg(train_data, test_data, model, n_context_windows, n_predict_windows,
-n_negatives, overlap, sampling_freq, window_length, predict_delay, batch_size=128, lr=1e-3):
+n_negatives, overlap, sampling_freq, window_length, predict_delay, batch_size=128, lr=1e-3, load_last_saved_model=False):
 	C = 2 # num channels
 	T = int(window_length*sampling_freq) # window length (in samples)
 
 	sampler = SSL_Window_Sampler(n_context_windows, n_predict_windows, n_negatives, overlap, sampling_freq, window_length, predict_delay, batch_size)
 
 	model = CPC_EEG(C, T, n_context_windows, n_predict_windows, n_negatives).cuda()
+
+	if load_last_saved_model:
+		model.load_state_dict(torch.load(op.join(root, 'saved_models', 'cpc_eeg_model.pt')))
+
 
 	train_losses, test_losses = _train_epochs(model, train_data, test_data, sampler,
 																			dict(epochs=n_epochs, batch_size=batch_size))
@@ -105,6 +109,8 @@ def _train_epochs(model, train_data, test_data, sampler, train_args):
 		# save model every 10 epochs
 		if epoch % 10 == 0:
 			torch.save(model.state_dict(), op.join(root, 'saved_models', 'cpc_eeg_model_epoch{}.pt'.format(epoch)))
+		torch.save(model.state_dict(), op.join(root, 'saved_models', 'cpc_eeg_model.pt'))
+
 	return train_losses, test_losses
 
 def _train(model, train_data, optimizer, epoch, sampler):
