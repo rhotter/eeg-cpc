@@ -26,7 +26,7 @@ n_negatives, overlap, sampling_freq, window_length, predict_delay, batch_size=12
 
 
 	new_train_losses, new_test_losses = _train_epochs(model, train_data, test_data, sampler,
-																			dict(epochs=n_epochs, batch_size=batch_size))
+																			dict(epochs=n_epochs, lr=lr))
 
 	if load_last_saved_model:
 		train_losses, test_losses = load_losses(saved_models_dir, 'cpc_eeg')
