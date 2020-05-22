@@ -19,7 +19,7 @@ def get_test_results(model, test_loader):
 			_, predicted = torch.max(softmax(out.data), 1)
 			y_true.extend(list(y.cpu().numpy()))
 			y_pred.extend(list(predicted.cpu().numpy()))
-	return y_pred, y_true
+	return y_true, y_pred
 
 def scores(model, epochs_test):
 	X_test = normalize(epochs_test.get_data())
@@ -27,9 +27,7 @@ def scores(model, epochs_test):
 	test_dataset = data.TensorDataset(torch.tensor(X_test).unsqueeze(1), torch.tensor(y_test))
 	test_loader = data.DataLoader(test_dataset, batch_size=128, shuffle=False)
 	
-	y_pred, y_true = get_test_results(model, test_loader)
-	import IPython
-	IPython.embed()
+	y_true, y_pred = get_test_results(model, test_loader)
 	print(f'Performance of the network on the {len(test_loader.dataset)} test images:')
-	print(f'\tAccuracy: {100*accuracy_score(y_pred, y_true)}%')
-	print(f'\tBalanced accuracy: {100*balanced_accuracy_score(y_pred, y_true)}%')
+	print(f'\tAccuracy: {100*accuracy_score(y_true, y_pred)}%')
+	print(f'\tBalanced accuracy: {100*balanced_accuracy_score(y_true, y_pred)}%')
