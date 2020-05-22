@@ -48,8 +48,9 @@ def load_labelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/da
     recording_epochs = mne.Epochs(raw=raw, events=events_train,
                 event_id=event_id, tmin=0., tmax=tmax, baseline=None, verbose='ERROR')
     epochs.append(recording_epochs)
-  
+  print("concatenating")
   epochs = mne.concatenate_epochs(epochs)
+  print("picking types")
   epochs.pick_types(eeg=True, verbose='ERROR') # only keep EEG channels
   return epochs
 
