@@ -25,8 +25,8 @@ def hand_engineered_baseline(epochs_train, epochs_test):
 	acc = accuracy_score(y_test, y_pred)
 	balanced_acc = balanced_accuracy_score(y_pred, y_test)
 
-	print("Accuracy score: {}".format(acc))
-	print("Balanced accuracy score: {}".format(balanced_acc))
+	print(f'Accuracy: {100*acc:.2f}%')
+	print(f'Balanced accuracy: {100*balanced_acc:.2f}%')
 
 def _eeg_power_band(epochs):
 		"""EEG relative power band feature extraction.
@@ -58,7 +58,7 @@ def _eeg_power_band(epochs):
 
 		X = []
 		for fmin, fmax in FREQ_BANDS.values():
-				psds_band = psds[:, :, (freqs >= fmin) & (freqs < fmax)].mean(axis=-1)
-				X.append(psds_band.reshape(len(psds), -1))
+			psds_band = psds[:, :, (freqs >= fmin) & (freqs < fmax)].mean(axis=-1)
+			X.append(psds_band.reshape(len(psds), -1))
 
 		return np.concatenate(X, axis=1)
