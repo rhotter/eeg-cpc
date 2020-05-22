@@ -37,7 +37,6 @@ def train_supervised_baseline(epochs_train, epochs_test, n_epochs=20, lr=1e-3, b
 def _train_epochs(model, train_loader, test_loader, train_args):
   epochs, lr = train_args['epochs'], train_args['lr']
   optimizer = optim.Adam(model.parameters(), lr=lr)
-	
 	saved_models_dir = op.join(root, 'saved_models')
 	if not os.path.exists(saved_models_dir):
 		os.makedirs(saved_models_dir)
