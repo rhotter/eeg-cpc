@@ -2,13 +2,14 @@ import torch
 from torch import optim
 from torch.utils import data
 import numpy as np
-from .train_helpers import normalize, get_loss_weights
+from .train_helpers import normalize, get_loss_weights, load_losses, save_losses
 
 from .models import SupervisedBaseline
 import os.path as op
 import os
 
 root = op.dirname(__file__)
+saved_models_dir = op.join(root, 'saved_models')
 
 def train_supervised_baseline(epochs_train, epochs_test, n_epochs=20, lr=1e-3, batch_size=256, load_last_saved_model=False):
 	X_train = normalize(epochs_train.get_data())
@@ -32,15 +33,25 @@ def train_supervised_baseline(epochs_train, epochs_test, n_epochs=20, lr=1e-3, b
 	test_dataset = data.TensorDataset(torch.tensor(X_test).unsqueeze(1), torch.tensor(y_test))
 	test_loader = data.DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
-	train_losses, test_losses = _train_epochs(model, train_loader, test_loader, 
+	new_train_losses, new_test_losses = _train_epochs(model, train_loader, test_loader, 
 																				 dict(epochs=n_epochs, lr=lr))
+
+	if load_last_saved_model:
+		train_losses, test_losses = load_losses(saved_models_dir)
+	else:
+		train_losses = []
+		test_losses = []
+	
+	train_losses.extend(new_train_losses)
+	test_losses.extend(new_test_losses)
+
+	save_losses(saved_models_dir)
 
 	return train_losses, test_losses, model
 
 def _train_epochs(model, train_loader, test_loader, train_args):
 	epochs, lr = train_args['epochs'], train_args['lr']
 	optimizer = optim.Adam(model.parameters(), lr=lr)
-	saved_models_dir = op.join(root, 'saved_models')
 	if not os.path.exists(saved_models_dir):
 		os.makedirs(saved_models_dir)
 	
