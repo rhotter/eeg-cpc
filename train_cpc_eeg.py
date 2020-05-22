@@ -9,9 +9,6 @@ from .models import CPC_EEG
 import os
 import os.path as op
 
-import IPython
-e = IPython.embed
-
 root = op.dirname(__file__)
 saved_models_dir = op.join(root, 'saved_models')
 
