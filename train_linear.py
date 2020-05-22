@@ -14,8 +14,10 @@ def train_linear(epochs_train, epochs_test, model, n_epochs=5, lr=1e-3, batch_si
 
   X_test = normalize(epochs_test.get_data())
   y_test = epochs_test.events[:, 2] - 1
+	
+  loss_weights = get_loss_weights(epochs_train)
   
-  linear_model = SSL_Linear(model).cuda()
+  linear_model = SSL_Linear(model, loss_weights).cuda()
 
   train_dataset = data.TensorDataset(torch.tensor(X_train).unsqueeze(1), torch.tensor(y_train))
   train_loader = data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
