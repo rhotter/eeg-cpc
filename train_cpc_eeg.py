@@ -88,10 +88,10 @@ class SSL_Window_Sampler():
 																						self.overlap*self.sampling_freq*self.window_length)
 			predict_window_start_times = np.arange(start_position + self.sampling_freq*context_time + self.sampling_freq*self.predict_delay,
 																						start_position + self.sampling_freq*context_time + self.sampling_freq*self.predict_delay + self.sampling_freq*predict_time - overlap*self.sampling_freq*self.window_length,
-																						overlap*self.sampling_freq*self.window_length)
+																						self.overlap*self.sampling_freq*self.window_length)
 			context_windows = [s[:,int(c_time):int(c_time)+self.sampling_freq*self.window_length] for c_time in context_window_start_times]
 			predict_windows = [s[:,int(p_time):int(p_time)+self.sampling_freq*self.window_length] for p_time in predict_window_start_times]
-			negative_windows = [self.sample_negatives(s, int(start_position), int(sample_length), int(n_negatives)) for i in range(len(predict_windows))]
+			negative_windows = [self.sample_negatives(s, int(start_position), int(sample_length)) for i in range(len(predict_windows))]
 
 			minibatch.append({
 				"context_windows": [normalize_one(c) for c in context_windows],
