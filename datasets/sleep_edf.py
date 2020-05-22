@@ -26,7 +26,7 @@ def load_labelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/da
   files = _fetch_data(subjects, path, recording)
   epochs = []
   print("Loading data...")
-  for x in tqdm(files):
+  for x in files:
     print(x[0])
     # load the data
     edf_file = x[0]
