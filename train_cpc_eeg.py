@@ -76,7 +76,7 @@ class SSL_Window_Sampler():
 		context_time = (1 + (self.n_context_windows-1)*self.overlap)*self.window_length
 		predict_time = (1 + (self.n_predict_windows-1)*self.overlap)*self.window_length
 		
-		sample_length = self.sampling_freq*(context_time + self.predict_delay + self.predict_time)
+		sample_length = self.sampling_freq*(context_time + self.predict_delay + predict_time)
 		
 		subjects = random.choices(train_data, k=self.batch_size)
 		minibatch = []
