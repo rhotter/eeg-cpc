@@ -12,7 +12,7 @@ import os.path as op
 root = op.dirname(__file__)
 saved_models_dir = op.join(root, 'saved_models')
 
-def train_cpc_eeg(train_data, test_data, n_context_windows, n_predict_windows,
+def train_cpc_eeg(train_data, test_data, n_epochs, n_context_windows, n_predict_windows,
 n_negatives, overlap, sampling_freq, window_length, predict_delay, batch_size=128, lr=1e-3, load_last_saved_model=False):
 	C = 2 # num channels
 	T = int(window_length*sampling_freq) # window length (in samples)
