@@ -3,6 +3,9 @@ import numpy as np
 from torch import nn
 from .feature_extractor import EEG_FeatureExtractor
 
+import IPython
+e = IPython.embed
+
 class CPC_EEG(nn.Module):
   def __init__(self, C, T, n_context, n_predict, n_negatives, embedding_dim=100, k=50, m=13, dropout_prob=0.5, n_spatial_filters=8):
     super().__init__()
@@ -52,6 +55,7 @@ class CPC_EEG(nn.Module):
     tensor = np.zeros((self.n_context + self.n_predict + self.n_predict*self.n_negatives, 1, self.C, self.T))
     tensor[0:self.n_context] = np.array(minibatch_dict["context_windows"]).reshape(-1,1,self.C,self.T)
     tensor[self.n_context:self.n_context+self.n_predict] = np.array(minibatch_dict["predict_windows"]).reshape(-1,1,self.C,self.T)
+    e()
     tensor[self.n_context+self.n_predict:] = np.array(minibatch_dict["negative_windows"]).reshape(-1,1,self.C,self.T)
     
     return torch.from_numpy(tensor).cuda().contiguous().float()

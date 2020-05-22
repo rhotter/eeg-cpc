@@ -101,7 +101,6 @@ class SSL_Window_Sampler():
 				"predict_windows": [normalize_one(c) for c in predict_windows],
 				"negative_windows": [normalize_one(c) for vec in negative_windows for c in vec]
 			})
-		e()
 		return minibatch
 
 def _train_epochs(model, train_data, test_data, sampler, train_args):
