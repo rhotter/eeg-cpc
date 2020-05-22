@@ -3,7 +3,7 @@ import torch
 from torch import optim
 from torch.utils import data
 
-from .train_helpers import normalize
+from .train_helpers import normalize, get_loss_weights
 from .models import SSL_Linear
 
 from .train_supervised_baseline import _train, _eval_loss
@@ -16,7 +16,7 @@ def train_linear(epochs_train, epochs_test, model, n_epochs=5, lr=1e-3, batch_si
   y_test = epochs_test.events[:, 2] - 1
 	
   loss_weights = get_loss_weights(epochs_train)
-  
+
   linear_model = SSL_Linear(model, loss_weights).cuda()
 
   train_dataset = data.TensorDataset(torch.tensor(X_train).unsqueeze(1), torch.tensor(y_train))
