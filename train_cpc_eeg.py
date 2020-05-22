@@ -9,6 +9,9 @@ from .models import CPC_EEG
 import os
 import os.path as op
 
+import IPython
+e = IPython.embed
+
 root = op.dirname(__file__)
 saved_models_dir = op.join(root, 'saved_models')
 
@@ -83,6 +86,7 @@ class SSL_Window_Sampler():
 		for s in subjects:
 			s_length = s.shape[1]
 			start_position = np.random.randint(0, s_length-sample_length)
+			e()
 			context_window_start_times = np.arange(start_position,
 																						start_position + context_time*self.sampling_freq - self.overlap*self.sampling_freq*self.window_length,
 																						self.overlap*self.sampling_freq*self.window_length)
@@ -125,16 +129,12 @@ def _train_epochs(model, train_data, test_data, sampler, train_args):
 
 	return train_losses, test_losses
 
-import IPython
-e = IPython.embed
-
 def _train(model, train_data, optimizer, epoch, sampler):
 	model.train()
 	
 	train_losses = []
 	for _ in range(10):
 		minibatch = sampler.get_minibatch(train_data)
-		e()
 		loss = model.forward(minibatch)
 		optimizer.zero_grad()
 		loss.backward()
@@ -147,7 +147,6 @@ def _eval_loss(model, test_data, sampler):
 	total_loss = 0
 	with torch.no_grad():
 		for _ in range(2):
-			e()
 			minibatch = sampler.get_minibatch(test_data)
 			loss = model.forward(minibatch)
 			total_loss += loss * sampler.batch_size
