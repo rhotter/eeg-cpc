@@ -2,6 +2,8 @@ from sklearn.metrics import balanced_accuracy_score, accuracy_score
 import torch
 from torch import nn
 import numpy as np
+from .train_helpers import normalize
+from torch.utils import data
 
 def get_test_results(model, test_loader):
 	y_true = []
@@ -19,7 +21,12 @@ def get_test_results(model, test_loader):
 			y_pred.extend(list(predicted.cpu().numpy()))
 	return y_pred, y_true
 
-def scores(model, test_loader):
+def scores(model, epochs_test):
+	X_test = normalize(epochs_test.get_data())
+	y_test = epochs_test.events[:, 2] - 1
+	test_dataset = data.TensorDataset(torch.tensor(X_test).unsqueeze(1), torch.tensor(y_test))
+	test_loader = data.DataLoader(test_dataset, batch_size=128, shuffle=False)
+	
 	y_pred, y_true = get_test_results(model, test_loader)
 	print(f'Performance of the network on the {len(test_loader.dataset)} test images:')
 	print(f'\tAccuracy: {100*accuracy_score(y_pred, y_true)}%')
