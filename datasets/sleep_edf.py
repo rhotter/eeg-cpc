@@ -2,6 +2,7 @@ import os
 import os.path as op
 import numpy as np
 import mne
+from tqdm import tqdm
 
 MAPPING = {'EOG horizontal': 'eog',
        'Resp oro-nasal': 'misc',
@@ -25,7 +26,7 @@ def load_labelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/da
   files = _fetch_data(subjects, path, recording)
   epochs = []
   print("Loading data...")
-  for x in files:
+  for x in tqdm(files):
     # load the data
     edf_file = x[0]
     annot_file = x[1]
@@ -56,7 +57,7 @@ def load_unlabelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/
   files = _fetch_data(subjects, path, recording)
   data = []
   print("Loading data...")
-  for x in files:
+  for x in tqdm(files):
     # load the data
     edf_file = x[0]
     raw = mne.io.read_raw_edf(edf_file, verbose='ERROR')
