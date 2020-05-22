@@ -55,3 +55,21 @@ class CPC_EEG(nn.Module):
     tensor[self.n_context+self.n_predict:] = np.array(minibatch_dict["negative_windows"]).reshape(-1,1,self.C,self.T)
     
     return torch.from_numpy(tensor).cuda().contiguous().float()
+
+class SSL_Linear(nn.Module):
+  def __init__(self, model):
+    super().__init__()
+    self.model = model
+    self.model.requires_grad = False
+    self.linear = nn.Linear(100, 5)
+    self.loss_fn = nn.CrossEntropyLoss()
+
+  def forward(self, x):
+    with torch.no_grad():
+      features = self.model.feature_extractor(x)
+    out = self.linear(features)
+    return out
+
+  def loss(self, x, y_true):
+    out = self(x)
+    return self.loss_fn(out, y_true)
