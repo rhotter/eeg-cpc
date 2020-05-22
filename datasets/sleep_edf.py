@@ -25,7 +25,6 @@ event_id = {'Sleep stage W': 1,
 def load_labelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/datasets', filter=False):
   files = _fetch_data(subjects, path, recording)
   epochs = []
-  print("Loading data...")
   for x in tqdm(files):
     # load the data
     edf_file = x[0]
@@ -46,7 +45,7 @@ def load_labelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/da
 
     tmax = 30. - 1. / raw.info['sfreq']  # tmax in included
     recording_epochs = mne.Epochs(raw=raw, events=events_train,
-                event_id=event_id, tmin=0., tmax=tmax, baseline=None, on_missing='warning', verbose='WARNING')
+                event_id=event_id, tmin=0., tmax=tmax, baseline=None, on_missing='ignore', verbose='WARNING')
     epochs.append(recording_epochs)
   print("concatenating")
   epochs = mne.concatenate_epochs(epochs)
@@ -57,7 +56,6 @@ def load_labelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/da
 def load_unlabelled_data(subjects, recording=[1, 2], path='/home/raphael_hotter/datasets'):
   files = _fetch_data(subjects, path, recording)
   data = []
-  print("Loading data...")
   for x in tqdm(files):
     # load the data
     edf_file = x[0]
