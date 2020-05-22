@@ -125,6 +125,9 @@ def _train_epochs(model, train_data, test_data, sampler, train_args):
 
 	return train_losses, test_losses
 
+import IPython
+e = IPython.embed
+
 def _train(model, train_data, optimizer, epoch, sampler):
 	model.train()
 	
@@ -144,6 +147,7 @@ def _eval_loss(model, test_data, sampler):
 	total_loss = 0
 	with torch.no_grad():
 		for _ in range(2):
+			e()
 			minibatch = sampler.get_minibatch(test_data)
 			loss = model.forward(minibatch)
 			total_loss += loss * sampler.batch_size
