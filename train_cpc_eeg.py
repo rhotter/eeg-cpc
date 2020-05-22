@@ -4,12 +4,13 @@ import torch
 from torch import optim
 from torch.utils import data
 
-from .train_helpers import normalize_one
+from .train_helpers import normalize_one, load_losses, save_losses
 from .models import CPC_EEG
 import os
 import os.path as op
 
 root = op.dirname(__file__)
+saved_models_dir = op.join(root, 'saved_models')
 
 def train_cpc_eeg(train_data, test_data, model, n_context_windows, n_predict_windows,
 n_negatives, overlap, sampling_freq, window_length, predict_delay, batch_size=128, lr=1e-3, load_last_saved_model=False):
@@ -24,8 +25,19 @@ n_negatives, overlap, sampling_freq, window_length, predict_delay, batch_size=12
 		model.load_state_dict(torch.load(op.join(root, 'saved_models', 'cpc_eeg_model.pt')))
 
 
-	train_losses, test_losses = _train_epochs(model, train_data, test_data, sampler,
+	new_train_losses, new_test_losses = _train_epochs(model, train_data, test_data, sampler,
 																			dict(epochs=n_epochs, batch_size=batch_size))
+
+	if load_last_saved_model:
+		train_losses, test_losses = load_losses(saved_models_dir, 'cpc_eeg')
+	else:
+		train_losses = []
+		test_losses = []
+	
+	train_losses.extend(new_train_losses)
+	test_losses.extend(new_test_losses)
+
+	save_losses(train_losses, test_losses, saved_models_dir, 'cpc_eeg')
 
 	return train_losses, test_losses, model
 
@@ -90,7 +102,7 @@ class SSL_Window_Sampler():
 		return minibatch
 
 def _train_epochs(model, train_data, test_data, sampler, train_args):
-	epochs, lr, batch_size = train_args['epochs'], train_args['lr'], train_args['batch_size']
+	epochs, lr = train_args['epochs'], train_args['lr']
 	optimizer = optim.Adam(model.parameters(), lr=lr)
 
 	saved_models_dir = op.join(root, 'saved_models')
@@ -117,7 +129,7 @@ def _train(model, train_data, optimizer, epoch, sampler):
 	model.train()
 	
 	train_losses = []
-	for i in range(10):
+	for _ in range(10):
 		minibatch = sampler.get_minibatch(train_data)
 		loss = model.forward(minibatch)
 		optimizer.zero_grad()
@@ -130,7 +142,7 @@ def _eval_loss(model, test_data, sampler):
 	model.eval()
 	total_loss = 0
 	with torch.no_grad():
-		for i in range(2):
+		for _ in range(2):
 			minibatch = sampler.get_minibatch(test_data)
 			loss = model.forward(minibatch)
 			total_loss += loss * sampler.batch_size

@@ -17,15 +17,15 @@ def get_loss_weights(epochs_train):
 	print("Class weights", weights)
 	return torch.from_numpy(weights).cuda().float()
 
-def load_losses(saved_models_dir):
-	with open(op.join(saved_models_dir, 'train_losses.npy'), 'rb') as f:
+def load_losses(saved_models_dir, name):
+	with open(op.join(saved_models_dir, name, '_train_losses.npy'), 'rb') as f:
 		train_losses = np.load(f)
-	with open(op.join(saved_models_dir, 'test_losses.npy'), 'rb') as f:
+	with open(op.join(saved_models_dir, name, '_test_losses.npy'), 'rb') as f:
 		test_losses = np.load(f)
 	return train_losses, test_losses
 
-def save_losses(train_losses, test_losses, saved_models_dir):
-	with open(op.join(saved_models_dir, 'train_losses.npy'), 'wb') as f:
+def save_losses(train_losses, test_losses, saved_models_dir, name):
+	with open(op.join(saved_models_dir, name, '_train_losses.npy'), 'wb') as f:
 		np.save(f, train_losses)
-	with open(op.join(saved_models_dir, 'test_losses.npy'), 'wb') as f:
+	with open(op.join(saved_models_dir, name, '_test_losses.npy'), 'wb') as f:
 		np.save(f, test_losses)
