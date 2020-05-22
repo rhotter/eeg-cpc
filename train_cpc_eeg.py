@@ -131,6 +131,7 @@ def _train(model, train_data, optimizer, epoch, sampler):
 	train_losses = []
 	for _ in range(10):
 		minibatch = sampler.get_minibatch(train_data)
+		e()
 		loss = model.forward(minibatch)
 		optimizer.zero_grad()
 		loss.backward()
