@@ -11,7 +11,7 @@ def normalize_one(x):
 
 def get_loss_weights(epochs_train):
   y_train = epochs_train.events[:, 2] - 1 # start at 0
-  _, counts = np.unique(y_train, return_counts=True)
-  weights = counts / len(y_train)
+  counts = np.bincount(y_train)
+  weights = len(y_train) / (counts * len(counts))
   print("Class weights", weights)
   return torch.from_numpy(weights).cuda().float()

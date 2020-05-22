@@ -13,6 +13,7 @@ def hand_engineered_baseline(epochs_train, epochs_test):
 	pipe = make_pipeline(FunctionTransformer(_eeg_power_band, validate=False),
 										RandomForestClassifier(n_estimators=100, random_state=42, class_weight='balanced'))
 	# Train
+	print("Training with balanced class weights")
 	y_train = epochs_train.events[:, 2]
 	pipe.fit(epochs_train, y_train)
 
