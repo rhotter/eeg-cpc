@@ -129,7 +129,7 @@ def _train(model, train_data, optimizer, epoch, sampler):
 	model.train()
 	
 	train_losses = []
-	for _ in range(10):
+	for _ in range(50):
 		minibatch = sampler.get_minibatch(train_data)
 		loss = model.forward(minibatch)
 		optimizer.zero_grad()
@@ -142,10 +142,10 @@ def _eval_loss(model, test_data, sampler):
 	model.eval()
 	total_loss = 0
 	with torch.no_grad():
-		for _ in range(2):
+		for _ in range(10):
 			minibatch = sampler.get_minibatch(test_data)
 			loss = model.forward(minibatch)
 			total_loss += loss * sampler.batch_size
-		avg_loss = total_loss / (2*sampler.batch_size)
+		avg_loss = total_loss / (10*sampler.batch_size)
 
 	return avg_loss.item()
